@@ -4,60 +4,49 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="description" content="Domainzax — a curated portfolio of premium digital names.">
-<meta name="theme-color" content="#07090d">
+<meta name="theme-color" content="#050608">
 <title>Domainzax — Premium Digital Names</title>
 <style>
-:root{color-scheme:dark;--bg:#06080c;--panel:#0c1017;--line:#1e2733;--text:#f5f7fb;--muted:#8994a5;--accent:#9bb2ff;--glow:#73e4c0}
-*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(800px 500px at 50% -15%,#18223a 0%,transparent 65%),var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}a{color:inherit;text-decoration:none}.wrap{width:min(1180px,calc(100% - 36px));margin:auto}
-nav{height:76px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.06)}.brand{font-size:21px;font-weight:850;letter-spacing:-.05em}.brand span{opacity:.45}.nav{display:flex;gap:22px;color:var(--muted);font-size:14px}.nav a:hover{color:var(--text)}
-.hero{text-align:center;padding:105px 0 75px}.eyebrow{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--glow);font-weight:800}.hero h1{font-size:clamp(58px,10vw,112px);line-height:.88;letter-spacing:-.075em;margin:19px 0}.hero h1 span{color:#718097}.hero p{max-width:620px;margin:auto;color:#aab5c5;font-size:19px}.cta{display:inline-flex;margin-top:30px;padding:13px 20px;border:1px solid #303b4c;border-radius:999px;background:#111824;font-weight:750;transition:.25s}.cta:hover{transform:translateY(-2px);border-color:#657b9e}
-.toolbar{display:flex;align-items:center;justify-content:space-between;margin:10px 0 20px;gap:15px}.toolbar h2{margin:0;font-size:27px;letter-spacing:-.04em}.filters{display:flex;gap:7px;flex-wrap:wrap}.filter{border:1px solid var(--line);background:#0b1017;color:var(--muted);padding:8px 12px;border-radius:999px;cursor:pointer}.filter.active,.filter:hover{color:var(--text);border-color:#50627e}
-.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.domain-card{position:relative;min-height:190px;padding:25px;border:1px solid var(--line);border-radius:20px;background:linear-gradient(145deg,rgba(16,22,31,.95),rgba(9,12,18,.95));overflow:hidden;transition:transform .35s,border-color .35s,box-shadow .35s;animation:rise .65s both}.domain-card:before{content:"";position:absolute;inset:-100% 40% 50% -30%;background:radial-gradient(circle,rgba(120,151,255,.13),transparent 65%);pointer-events:none}.domain-card:hover{transform:translateY(-7px);border-color:#465875;box-shadow:0 20px 55px rgba(0,0,0,.35)}.domain{position:relative;font-size:23px;font-weight:800;letter-spacing:-.045em;word-break:break-word}.tag{display:inline-block;margin-top:14px;padding:5px 9px;border:1px solid #263242;border-radius:999px;color:#91a0b4;font-size:11px}.inquire{position:absolute;right:22px;bottom:20px;color:#9eb3dc;font-size:13px;font-weight:700}.inquire:hover{color:#fff}
-.contact{margin:85px 0 45px;padding:45px;border:1px solid var(--line);border-radius:25px;text-align:center;background:linear-gradient(145deg,#0d131d,#090c12)}.contact h2{font-size:35px;letter-spacing:-.05em;margin:0 0 10px}.contact p{color:var(--muted);margin:0 auto 25px;max-width:570px}.channels{display:flex;justify-content:center;gap:10px;flex-wrap:wrap}.channel{padding:11px 16px;border:1px solid var(--line);border-radius:12px;background:#0b1017;color:#c2ccda;transition:.2s}.channel:hover{transform:translateY(-2px);border-color:#536783;color:#fff}
-footer{padding:30px 0 45px;border-top:1px solid rgba(255,255,255,.06);display:flex;justify-content:space-between;color:#626e80;font-size:12px}
-@keyframes rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
-@media(max-width:820px){.grid{grid-template-columns:repeat(2,1fr)}}@media(max-width:600px){.nav{display:none}.hero{padding:75px 0 55px}.grid{grid-template-columns:1fr}.toolbar{display:block}.filters{margin-top:14px}.contact{padding:32px 20px}footer{display:block}}
+:root{color-scheme:dark;--bg:#050608;--panel:#0a0d12;--line:rgba(255,255,255,.10);--text:#f5f7fb;--muted:#8993a5;--accent:#a7b8ff;--mint:#7df0c5}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;overflow-x:hidden}a{color:inherit;text-decoration:none}.wrap{width:min(1180px,calc(100% - 36px));margin:auto}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;z-index:-2;background:radial-gradient(600px 450px at var(--mx,50%) var(--my,15%),rgba(119,142,255,.12),transparent 70%),radial-gradient(500px 400px at 85% 80%,rgba(74,229,177,.055),transparent 70%)}
+.noise{position:fixed;inset:0;pointer-events:none;opacity:.035;z-index:10;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.8'/%3E%3C/svg%3E")}
+nav{height:76px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.07);position:relative;z-index:20}.brand{font-size:21px;font-weight:900;letter-spacing:-.06em}.brand span{opacity:.38}.nav{display:flex;gap:25px;color:var(--muted);font-size:13px}.nav a{transition:.25s}.nav a:hover{color:#fff}
+.hero{position:relative;text-align:center;padding:120px 0 100px}.orb{position:absolute;left:50%;top:35px;width:420px;height:420px;transform:translateX(-50%);border-radius:50%;background:radial-gradient(circle,rgba(127,151,255,.13),transparent 62%);filter:blur(2px);animation:float 7s ease-in-out infinite;pointer-events:none}.eyebrow{display:inline-flex;align-items:center;gap:9px;font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--mint);font-weight:850}.eyebrow:before{content:"";width:6px;height:6px;border-radius:50%;background:var(--mint);box-shadow:0 0 18px var(--mint);animation:pulse 2s infinite}.hero h1{position:relative;font-size:clamp(62px,11vw,132px);line-height:.84;letter-spacing:-.085em;margin:23px 0}.hero h1 span{background:linear-gradient(100deg,#7586b1,#eef1ff 45%,#8bffc9);-webkit-background-clip:text;background-clip:text;color:transparent}.hero p{position:relative;max-width:650px;margin:auto;color:#9ea9ba;font-size:18px;line-height:1.7}.cta{position:relative;display:inline-flex;margin-top:31px;padding:14px 21px;border:1px solid rgba(255,255,255,.15);border-radius:999px;background:rgba(255,255,255,.055);backdrop-filter:blur(14px);font-weight:800;transition:.3s;box-shadow:0 12px 45px rgba(0,0,0,.22)}.cta:hover{transform:translateY(-3px);border-color:rgba(167,184,255,.55);box-shadow:0 16px 55px rgba(80,100,180,.18)}
+.toolbar{display:flex;align-items:end;justify-content:space-between;margin:0 0 20px;gap:15px}.toolbar h2{margin:0;font-size:27px;letter-spacing:-.05em}.count{font-size:12px;color:#687386;margin-left:8px;font-weight:500}.filters{display:flex;gap:7px;flex-wrap:wrap}.filter{border:1px solid var(--line);background:rgba(255,255,255,.025);color:var(--muted);padding:8px 12px;border-radius:999px;cursor:pointer;transition:.25s}.filter.active,.filter:hover{color:#fff;border-color:rgba(167,184,255,.48);background:rgba(120,140,220,.08)}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.domain-card{--rx:0deg;--ry:0deg;position:relative;min-height:205px;padding:25px;border:1px solid var(--line);border-radius:22px;background:linear-gradient(145deg,rgba(17,21,29,.82),rgba(7,9,13,.92));overflow:hidden;transform:perspective(900px) rotateX(var(--rx)) rotateY(var(--ry)) translateZ(0);transition:transform .16s ease-out,border-color .35s,box-shadow .35s;animation:rise .7s both;will-change:transform}.domain-card:after{content:"";position:absolute;width:180px;height:180px;left:var(--gx,50%);top:var(--gy,50%);transform:translate(-50%,-50%);background:radial-gradient(circle,rgba(142,163,255,.18),transparent 68%);opacity:0;transition:opacity .3s;pointer-events:none}.domain-card:hover{border-color:rgba(154,175,255,.38);box-shadow:0 28px 70px rgba(0,0,0,.38)}.domain-card:hover:after{opacity:1}.domain-card .index{position:absolute;right:20px;top:18px;color:#3d4654;font-size:10px;letter-spacing:.12em}.domain{position:relative;z-index:2;font-size:22px;font-weight:850;letter-spacing:-.045em;word-break:break-word;padding-right:25px}.tag{position:relative;z-index:2;display:inline-block;margin-top:15px;padding:5px 9px;border:1px solid rgba(255,255,255,.10);border-radius:999px;color:#929daf;font-size:10px;letter-spacing:.08em}.inquire{position:absolute;z-index:3;right:21px;bottom:20px;color:#9eadd0;font-size:12px;font-weight:800;transition:.2s}.inquire:hover{color:#fff;transform:translateX(3px)}
+.contact{position:relative;margin:100px 0 45px;padding:60px 30px;border:1px solid var(--line);border-radius:28px;text-align:center;background:linear-gradient(145deg,rgba(16,21,30,.9),rgba(8,10,15,.9));overflow:hidden}.contact:before{content:"";position:absolute;inset:-80px;background:conic-gradient(from 180deg,transparent,rgba(125,240,197,.08),transparent,rgba(145,160,255,.08),transparent);animation:spin 14s linear infinite}.contact>*{position:relative}.contact h2{font-size:38px;letter-spacing:-.06em;margin:0 0 10px}.contact p{color:var(--muted);margin:0 auto 26px;max-width:570px;line-height:1.6}.channels{display:flex;justify-content:center;gap:10px;flex-wrap:wrap}.channel{padding:11px 16px;border:1px solid var(--line);border-radius:12px;background:rgba(255,255,255,.035);color:#c2ccda;transition:.25s}.channel:hover{transform:translateY(-3px);border-color:#667ba3;color:#fff}
+footer{padding:30px 0 45px;border-top:1px solid rgba(255,255,255,.07);display:flex;justify-content:space-between;color:#626d7e;font-size:12px}
+.reveal{opacity:0;transform:translateY(18px);transition:opacity .8s ease,transform .8s ease}.reveal.visible{opacity:1;transform:none}
+@keyframes rise{from{opacity:0;transform:perspective(900px) translateY(24px)}to{opacity:1;transform:perspective(900px) translateY(0)}}@keyframes float{0%,100%{transform:translate(-50%,0) scale(1)}50%{transform:translate(-50%,25px) scale(1.08)}}@keyframes pulse{0%,100%{opacity:.5;transform:scale(.8)}50%{opacity:1;transform:scale(1.2)}}@keyframes spin{to{transform:rotate(360deg)}}
+@media(max-width:820px){.grid{grid-template-columns:repeat(2,1fr)}}@media(max-width:600px){.nav{display:none}.hero{padding:85px 0 70px}.hero h1{font-size:clamp(57px,18vw,88px)}.grid{grid-template-columns:1fr}.toolbar{display:block}.filters{margin-top:14px}.contact{padding:42px 20px;margin-top:75px}footer{display:block}.orb{width:300px;height:300px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition:none!important}}
 </style>
 </head>
 <body>
-<div class="wrap">
-<nav><a class="brand" href="#">DOMAINZAX<span>.COM</span></a><div class="nav"><a href="#portfolio">Portfolio</a><a href="#contact">Contact</a><a href="https://github.com/4gmxsol-tech/Domainzax.com">GitHub</a></div></nav>
-
-<header class="hero">
-<div class="eyebrow">Curated Digital Names</div>
-<h1>Names that<br><span>mean something.</span></h1>
-<p>A focused portfolio of premium domains selected for technology, robotics, AI and emerging digital categories.</p>
-<a class="cta" href="#portfolio">Explore the portfolio ↓</a>
-</header>
-
-<main id="portfolio">
-<div class="toolbar"><h2>Selected Domains</h2><div class="filters"><button class="filter active" data-filter="all">All</button><button class="filter" data-filter="com">.COM</button><button class="filter" data-filter="ai">AI / Tech</button><button class="filter" data-filter="other">Other</button></div></div>
-<div class="grid" id="grid"></div>
-</main>
-
-<section class="contact" id="contact">
-<h2>Interested in a domain?</h2>
-<p>For acquisition inquiries, partnerships or domain-specific questions, contact us through any channel below.</p>
-<div class="channels">
-<a class="channel" href="mailto:sales@domainzax.com">✉ Email</a>
-<a class="channel" href="https://x.com/Domainzax">𝕏 X</a>
-<a class="channel" href="https://github.com/4gmxsol-tech/Domainzax.com">◈ GitHub</a>
-</div>
-</section>
-
-<footer><span>© 2026 Domainzax</span><span>Premium digital names</span></footer>
-</div>
-
+<div class="noise"></div><div class="wrap">
+<nav><a class="brand" href="#">DOMAINZAX<span>.COM</span></a><div class="nav"><a href="#portfolio">Portfolio</a><a href="#contact">Contact</a><a href="https://x.com/Domainzax">X</a></div></nav>
+<header class="hero"><div class="orb"></div><div class="eyebrow">Curated Digital Names</div><h1>Names that<br><span>move markets.</span></h1><p>A focused portfolio of memorable digital names for AI, robotics, technology and the next generation of products.</p><a class="cta" href="#portfolio">Explore the portfolio ↓</a></header>
+<main id="portfolio" class="reveal"><div class="toolbar"><h2>Selected Domains <span class="count" id="count"></span></h2><div class="filters"><button class="filter active" data-filter="all">All</button><button class="filter" data-filter="com">.COM</button><button class="filter" data-filter="ai">AI / Tech</button><button class="filter" data-filter="other">Other</button></div></div><div class="grid" id="grid"></div></main>
+<section class="contact reveal" id="contact"><h2>Own the name before the story.</h2><p>For acquisition inquiries, partnerships or domain-specific questions, contact us through any channel below.</p><div class="channels"><a class="channel" href="mailto:sales@domainzax.com">✉ Email</a><a class="channel" href="https://x.com/Domainzax">𝕏 X</a><a class="channel" href="https://github.com/4gmxsol-tech/Domainzax.com">◈ GitHub</a></div></section>
+<footer><span>© 2026 Domainzax</span><span>Premium digital names</span></footer></div>
 <script>
-const domains=[
-["Domainzax.com","com"],["Xanvora.com","com"],["HumanoidBehavior.com","com"],["HumanoidPlanning.com","com"],["HumanoidContext.com","com"],["HumanoidIntelligenceAI.com","com"],["HumanoidIntelligenceLab.com","com"],["RobotIntelligenceAI.com","com"],["RobotIntelligenceLab.com","com"],["RobotEmbodiment.com","com"],["PhysicalManipulation.com","com"],["RobotIntelligence.bot","ai"],["AgentSI.space","other"],
-["Czeal","other"],["brenoai","ai"],["reasonflow.xyz","other"],["KnightNova","other"],["HomesinBelgium","other"],["ContextShip","other"],["aividyou","ai"]
-];
-const grid=document.getElementById("grid");
+const domains=[["Domainzax.com","com"],["Xanvora.com","com"],["HumanoidBehavior.com","com"],["HumanoidPlanning.com","com"],["HumanoidContext.com","com"],["HumanoidIntelligenceAI.com","com"],["HumanoidIntelligenceLab.com","com"],["RobotIntelligenceAI.com","com"],["RobotIntelligenceLab.com","com"],["RobotEmbodiment.com","com"],["PhysicalManipulation.com","com"],["RobotIntelligence.bot","ai"],["AgentSI.space","other"],["Czeal","other"],["brenoai","ai"],["reasonflow.xyz","other"],["KnightNova","other"],["HomesinBelgium","other"],["ContextShip","other"],["aividyou","ai"]];
+const grid=document.getElementById("grid"),count=document.getElementById("count");
 function render(filter="all"){
- grid.innerHTML=domains.map((d,i)=>{if(filter!=="all"&&d[1]!==filter)return"";return '<article class="domain-card" style="animation-delay:'+Math.min(i*35,650)+'ms"><div class="domain">'+d[0]+'</div><span class="tag">'+(d[1]==="com"?".COM":d[1]==="ai"?"AI / TECH":d[0].endsWith(".xyz")?".XYZ":"DOMAIN")+'</span><a class="inquire" href="mailto:sales@domainzax.com?subject=Inquiry%20about%20'+encodeURIComponent(d[0])+'">Inquire →</a></article>'}).join("");
+ const shown=domains.filter(d=>filter==="all"||d[1]===filter);count.textContent=shown.length+" names";
+ grid.innerHTML=shown.map((d,i)=>'<article class="domain-card" data-tilt style="animation-delay:'+Math.min(i*35,650)+'ms"><span class="index">'+String(i+1).padStart(2,"0")+'</span><div class="domain">'+d[0]+'</div><span class="tag">'+(d[1]==="com"?".COM":d[1]==="ai"?"AI / TECH":d[0].endsWith(".xyz")?".XYZ":"DOMAIN")+'</span><a class="inquire" href="mailto:sales@domainzax.com?subject=Inquiry%20about%20'+encodeURIComponent(d[0])+'">Inquire →</a></article>').join("");
+ attachTilt();
+}
+function attachTilt(){
+ document.querySelectorAll("[data-tilt]").forEach(card=>{
+  card.addEventListener("pointermove",e=>{const r=card.getBoundingClientRect(),x=e.clientX-r.left,y=e.clientY-r.top;card.style.setProperty("--ry",((x/r.width)-.5)*10+"deg");card.style.setProperty("--rx",((.5-y/r.height)*8)+"deg");card.style.setProperty("--gx",x+"px");card.style.setProperty("--gy",y+"px")});
+  card.addEventListener("pointerleave",()=>{card.style.setProperty("--rx","0deg");card.style.setProperty("--ry","0deg")});
+ });
 }
 document.querySelectorAll(".filter").forEach(b=>b.onclick=()=>{document.querySelectorAll(".filter").forEach(x=>x.classList.remove("active"));b.classList.add("active");render(b.dataset.filter)});
+document.addEventListener("pointermove",e=>{document.documentElement.style.setProperty("--mx",(e.clientX/window.innerWidth*100)+"%");document.documentElement.style.setProperty("--my",(e.clientY/window.innerHeight*100)+"%")});
+const observer=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add("visible")}),{threshold:.12});document.querySelectorAll(".reveal").forEach(e=>observer.observe(e));
 render();
 </script>
 </body>
