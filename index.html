@@ -15,6 +15,87 @@ header{height:86px;border-bottom:1px solid var(--hair);display:flex;align-items:
 footer{display:flex;justify-content:space-between;padding:25px 0 40px;border-top:1px solid var(--hair);font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
 .reveal{opacity:0;transform:translateY(35px);transition:.9s cubic-bezier(.2,.7,.2,1)}.reveal.show{opacity:1;transform:none}@keyframes marquee{to{transform:translateX(-50%)}}@keyframes drift{50%{transform:translate(-40px,35px) scale(1.12)}}@media(max-width:700px){.shell{width:min(100% - 28px,1320px)}header{height:70px}nav{display:none}.hero{min-height:620px}.hero h1{font-size:clamp(62px,19vw,105px)}.hero-bottom{display:block}.hero-link{margin-top:25px}.marquee{margin-bottom:70px}.portfolio-head{display:block}.portfolio-head h2{font-size:38px;margin-bottom:8px}.filters{overflow:auto}.domain-row{grid-template-columns:38px 1fr 75px;min-height:92px}.type{display:none}.name{font-size:24px}.contact{margin:100px 0 55px;padding:50px 25px}.contact:after{font-size:65px}footer{display:block;line-height:2.2}}
 @media(prefers-reduced-motion:reduce){*,*:before{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+
+/* ===== responsive system ===== */
+img,svg,video,canvas{max-width:100%;height:auto}
+button,a{touch-action:manipulation}
+@media (min-width:1400px){.shell{width:min(1380px,calc(100% - 80px))}.hero{min-height:760px}.hero h1{font-size:clamp(130px,12vw,190px)}}
+@media (min-width:1025px) and (max-width:1399px){.shell{width:min(1180px,calc(100% - 56px))}.hero h1{font-size:clamp(90px,11vw,150px)}}
+@media (min-width:769px) and (max-width:1024px){
+ .shell{width:calc(100% - 56px)}
+ header{height:78px}
+ .hero{min-height:610px;padding:80px 0}
+ .hero h1{font-size:clamp(76px,11vw,116px);max-width:850px}
+ .hero-bottom{max-width:760px;gap:40px}
+ .hero-copy{font-size:16px}
+ .marquee{margin-bottom:80px}
+ .portfolio-head h2{font-size:42px}
+ .domain-row{grid-template-columns:58px minmax(0,1fr) 120px 95px;min-height:105px}
+ .name{font-size:clamp(22px,3.4vw,34px)}
+ .contact{margin-top:110px;padding:65px 6%}
+}
+@media (hover:none){
+ .domain-row:before{display:none}
+ .domain-row:active{background:var(--ink);color:var(--paper)}
+ .domain-row:active .name,.domain-row:active .type,.domain-row:active .row-cta,.domain-row:active .num{color:var(--paper)}
+ .hero-link:active .circle-arrow{background:var(--ink);color:var(--paper)}
+}
+@media (max-width:768px){
+ .shell{width:calc(100% - 32px)}
+ header{height:72px}
+ .logo{font-size:19px}
+ nav{display:none}
+ .hero{min-height:auto;padding:88px 0 76px}
+ .hero:before{width:340px;height:340px;right:-190px;top:30px}
+ .kicker{font-size:9px;letter-spacing:.16em;margin-bottom:20px}
+ .hero h1{font-size:clamp(64px,18vw,105px);line-height:.82;max-width:100%;word-break:normal}
+ .hero-bottom{display:flex;flex-direction:column;align-items:flex-start;gap:25px;margin-top:38px}
+ .hero-copy{font-size:15px;line-height:1.6;max-width:560px}
+ .hero-link{font-size:13px}
+ .circle-arrow{width:42px;height:42px}
+ .marquee{margin-bottom:68px;padding:11px 0}
+ .track{font-size:9px}
+ .portfolio-head{display:flex;align-items:end;gap:15px;margin-bottom:20px}
+ .portfolio-head h2{font-size:36px}
+ .meta{font-size:10px}
+ .filters{display:flex;overflow-x:auto;flex-wrap:nowrap;padding-bottom:5px;margin-bottom:22px;scrollbar-width:none}
+ .filters::-webkit-scrollbar{display:none}
+ .filter{flex:0 0 auto;padding:9px 13px}
+ .domain-row{grid-template-columns:34px minmax(0,1fr) auto;min-height:88px;gap:8px}
+ .num{font-size:9px}
+ .name{font-size:clamp(20px,6vw,28px);line-height:1.05;overflow-wrap:anywhere}
+ .type{display:none}
+ .row-cta{font-size:10px;opacity:1;transform:none}
+ .contact{margin:90px 0 50px;padding:48px 22px}
+ .contact h2{font-size:clamp(46px,13vw,68px)}
+ .contact p{font-size:14px}
+ .channels{margin-top:25px}
+ .channel{padding:11px 15px}
+ footer{display:flex;flex-direction:column;gap:6px;padding-bottom:30px}
+}
+@media (max-width:430px){
+ .shell{width:calc(100% - 24px)}
+ header{height:64px}
+ .logo{font-size:17px}
+ .hero{padding:72px 0 62px}
+ .hero h1{font-size:clamp(58px,19vw,78px)}
+ .hero-bottom{margin-top:30px}
+ .hero-copy{font-size:14px}
+ .portfolio-head{display:block}
+ .portfolio-head h2{font-size:32px;margin-bottom:5px}
+ .domain-row{grid-template-columns:27px minmax(0,1fr) auto;min-height:82px}
+ .name{font-size:20px}
+ .row-cta{font-size:9px}
+ .contact{padding:42px 18px}
+ .contact:after{font-size:48px}
+}
+@media (max-width:340px){
+ .shell{width:calc(100% - 18px)}
+ .hero h1{font-size:56px}
+ .name{font-size:18px}
+ .row-cta{font-size:8px}
+}
+@media (prefers-reduced-motion:reduce){.track,.hero:before{animation:none!important}}
 </style>
 </head>
 <body><div class="shell">
