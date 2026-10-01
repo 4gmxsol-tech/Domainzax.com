@@ -155,4 +155,7 @@ const themeToggle=document.getElementById("themeToggle"),themeIcon=document.getE
 function setTheme(dark){document.body.classList.toggle("dark",dark);localStorage.setItem("domainzax-theme",dark?"dark":"light");themeColor.content=dark?"#080a10":"#f4f2ed";themeIcon.innerHTML=dark?'<path d="M20.8 15.4A8.5 8.5 0 0 1 8.6 3.2 8.5 8.5 0 1 0 20.8 15.4Z"/>':'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>'}
 setTheme(localStorage.getItem("domainzax-theme")==="dark");themeToggle.onclick=()=>setTheme(!document.body.classList.contains("dark"));
 addEventListener("scroll",()=>backTop.classList.toggle("show",scrollY>500),{passive:true});backTop.onclick=()=>scrollTo({top:0,behavior:"smooth"});
-</script></body></html>
+</script>
+<a href="https://discord.gg/ewUr2dmt" target="_blank" rel="noopener noreferrer" aria-label="Join the Domainzax Discord community" style="position:fixed;right:18px;bottom:18px;z-index:9999;display:inline-flex;align-items:center;gap:8px;padding:11px 15px;border-radius:999px;background:#5865F2;color:#fff;font:600 14px/1.2 system-ui,-apple-system,sans-serif;text-decoration:none;box-shadow:0 4px 16px rgba(0,0,0,.22)"> <span aria-hidden="true">◉</span> Discord · Domainzax </a>
+
+</body></html>
