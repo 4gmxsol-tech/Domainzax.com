@@ -72,6 +72,24 @@ h1{animation:rise 1s .08s both}
 @keyframes modalIn{from{opacity:0;transform:translateY(18px) scale(.97)}to{opacity:1;transform:none}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
 @media(max-width:760px){.hero{padding-top:92px}.hero:before{width:330px;height:330px}.row:hover{transform:none}.section:before{display:none}}
+
+/* PREMIUM ASSET CARDS */
+.list{border-top:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.row{display:grid;grid-template-columns:1fr;grid-template-rows:auto auto auto;gap:0;min-height:0;border:1px solid var(--line);border-radius:22px;padding:22px;background:linear-gradient(145deg,rgba(255,255,255,.025),rgba(255,255,255,.008));overflow:hidden;opacity:0;transform:translateY(18px);transition:opacity .65s ease,transform .65s cubic-bezier(.2,.8,.2,1),border-color .35s,box-shadow .35s,background .35s}
+.row.reveal{opacity:1;transform:none}
+.row:before{background:radial-gradient(circle at 15% 0%,rgba(117,104,255,.16),transparent 52%);transform:translateY(100%);transition:.55s}
+.row:hover:before{transform:none}
+.row:hover{transform:translateY(-6px);box-shadow:0 24px 60px rgba(0,0,0,.25);border-color:rgba(117,104,255,.3);background:linear-gradient(145deg,rgba(117,104,255,.07),rgba(255,255,255,.012))}
+.cardtop{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:18px}
+.rank{font-size:9px;color:#697286;letter-spacing:.12em;font-weight:900}
+.score{font-size:9px;color:var(--green);border:1px solid rgba(114,240,189,.2);background:rgba(114,240,189,.05);border-radius:999px;padding:6px 9px;font-weight:950}
+.row .domain{font-size:clamp(25px,3vw,40px);line-height:1;display:block;margin-bottom:13px}
+.carddesc{font-size:11px;line-height:1.55;color:var(--muted);min-height:35px;max-width:92%}
+.cardbottom{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:20px}
+.cardtags{display:flex;gap:5px;flex-wrap:wrap}.cardtag{font-size:8px;text-transform:uppercase;letter-spacing:.08em;color:#8d96a8;border:1px solid var(--line);border-radius:999px;padding:6px 8px}
+.cardcta{font-size:9px;font-weight:950;color:#dce1eb;white-space:nowrap}.row:hover .cardcta{color:#fff}
+.kind{display:none}.num{display:none}
+@media(max-width:760px){.list{grid-template-columns:1fr}.row{padding:19px;border-radius:19px}.row:hover{transform:translateY(-3px)}.row .domain{font-size:29px}.carddesc{max-width:100%}}
 </style>
 </head>
 <body>
@@ -118,7 +136,8 @@ let filter="all",q="",spot=20,current=null,sortMode="featured";
 const list=document.getElementById("list"),search=document.getElementById("search"),result=document.getElementById("result");
 const filtered=()=>domains.filter(d=>{const hay=(d[0]+" "+d[1]+" "+d[2]+" "+d[3].join(" ")).toLowerCase();const mq=!q||hay.includes(q);const mf=filter==="all"||(filter==="com"&&d[1]==="com")||(filter==="si"&&d[1]==="si")||(filter==="ai"&&/ai|agent|reason|compute|intelligence|context/.test(hay))||(filter==="robotics"&&/robot|humanoid|physical|manipulation|embodiment/.test(hay))||(filter==="brand"&&d[3].includes("Brandable"));return mq&&mf});
 function mailto(name){return "mailto:sales@domainzax.com?subject="+encodeURIComponent("Acquisition inquiry — "+name)+"&body="+encodeURIComponent("Hello Domainzax,%0A%0AI am interested in acquiring "+name+".%0A%0APlease send me the acquisition terms.%0A%0ABest regards,")}
-function render(){let arr=filtered();if(sortMode==="short")arr=[...arr].sort((a,b)=>a[0].length-b[0].length);else if(sortMode==="az")arr=[...arr].sort((a,b)=>a[0].localeCompare(b[0]));else if(sortMode==="si")arr=[...arr].sort((a,b)=>(b[1]==="si")-(a[1]==="si"));result.textContent=arr.length+" of "+domains.length+" domains";list.innerHTML=arr.length?arr.map((d,i)=>'<article class="row"><span class="num">'+String(i+1).padStart(2,"0")+'</span><div class="domain" data-name="'+d[0]+'">'+d[0]+'</div><div class="kind">'+d[1].toUpperCase()+'</div><a class="acquire" href="'+mailto(d[0])+'">Acquire ↗</a></article>').join(""):'<div class="empty">No names match that search. Try a shorter keyword or reset the filters.</div>'}
+function render(){let arr=filtered();if(sortMode==="short")arr=[...arr].sort((a,b)=>a[0].length-b[0].length);else if(sortMode==="az")arr=[...arr].sort((a,b)=>a[0].localeCompare(b[0]));else if(sortMode==="si")arr=[...arr].sort((a,b)=>(b[1]==="si")-(a[1]==="si"));result.textContent=arr.length+" of "+domains.length+" domains";list.innerHTML=arr.length?arr.map((d,i)=>{const score=d[1]==="si"?(d[0].length<=4?96:92):(d[0].length<=10?95:/humanoid|robot|physical|compute|cognitive|intelligence/i.test(d[0])?93:89);return '<article class="row" style="transition-delay:'+Math.min(i*45,450)+'ms"><div class="cardtop"><span class="rank">ASSET '+String(i+1).padStart(2,"0")+'</span><span class="score">'+score+' / 100</span></div><div class="domain" data-name="'+d[0]+'">'+d[0]+'</div><div class="carddesc">'+d[2]+'</div><div class="cardbottom"><div class="cardtags">'+d[3].slice(0,3).map(x=>'<span class="cardtag">'+x+'</span>').join("")+'</div><a class="cardcta" href="'+mailto(d[0])+'">ACQUIRE ↗</a></div></article>'}).join(""):'<div class="empty">No names match that search. Try a shorter keyword or reset the filters.</div>'}
+function revealCards(){document.querySelectorAll(".row:not(.reveal)").forEach(el=>{if(el.getBoundingClientRect().top<window.innerHeight*.94)el.classList.add("reveal")})}
 function tags(d){return d[3].map(x=>'<span class="tag">'+x+'</span>').join("")}
 function show(d){if(!d)return;current=d;document.getElementById("mName").textContent=d[0];document.getElementById("mType").textContent=d[1].toUpperCase()+" · "+d[3].join(" / ");document.getElementById("mStory").textContent=d[2];document.getElementById("mTags").innerHTML=tags(d);document.getElementById("mMail").href=mailto(d[0]);document.getElementById("modal").classList.add("open");document.getElementById("modal").setAttribute("aria-hidden","false")}
 function setSpot(){const d=domains[spot%domains.length];document.getElementById("spotName").textContent=d[0];document.getElementById("spotStory").textContent=d[2];document.getElementById("spotTags").innerHTML=tags(d);document.getElementById("spotOpen").onclick=()=>show(d);spot++}
@@ -132,6 +151,6 @@ document.getElementById("modal").onclick=e=>{if(e.target.id==="modal")e.currentT
 document.addEventListener("keydown",e=>{if(e.key==="Escape")document.getElementById("modal").classList.remove("open")});
 document.getElementById("mCopy").onclick=async()=>{if(!current)return;try{await navigator.clipboard.writeText(current[0]);document.getElementById("mCopy").textContent="✓ Copied";setTimeout(()=>document.getElementById("mCopy").textContent="Copy domain",1300)}catch{}};
 document.getElementById("total").textContent=domains.length;document.getElementById("siCount").textContent=domains.filter(d=>d[1]==="si").length;document.getElementById("techCount").textContent=domains.filter(d=>/robot|humanoid|ai|reason|compute|physical|intelligence|agent/i.test(d[0])).length;
-render();setSpot();setInterval(setSpot,9000);
+render();setSpot();requestAnimationFrame(revealCards);window.addEventListener("scroll",revealCards,{passive:true});setInterval(setSpot,9000);
 </script>
 </body></html>
