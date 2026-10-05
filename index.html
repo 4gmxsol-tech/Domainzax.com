@@ -29,6 +29,49 @@ footer{border-top:1px solid var(--line);padding:24px 0 38px;display:flex;justify
 .modal{position:fixed;inset:0;background:rgba(2,3,7,.72);backdrop-filter:blur(16px);z-index:50;display:grid;place-items:center;padding:20px;opacity:0;pointer-events:none;transition:.25s}.modal.open{opacity:1;pointer-events:auto}.panel{width:min(650px,100%);background:#0d1018;border:1px solid #2a3040;border-radius:28px;padding:30px;box-shadow:0 30px 100px #000}.close{float:right;border:1px solid var(--line);background:transparent;color:#fff;border-radius:50%;width:34px;height:34px;cursor:pointer}.modal-kicker{font-size:9px;color:var(--green);letter-spacing:.17em;text-transform:uppercase;font-weight:900}.modal h3{font-size:clamp(35px,6vw,62px);letter-spacing:-.08em;margin:13px 0 4px}.modal-type{font-size:10px;color:#778194;text-transform:uppercase;letter-spacing:.12em}.modal p{color:var(--muted);line-height:1.7;font-size:14px}.modal-actions{display:flex;gap:8px;margin-top:22px;flex-wrap:wrap}
 @keyframes grad{to{background-position:180% center}}@keyframes marquee{to{transform:translateX(-50%)}}
 @media(max-width:760px){.wrap{width:calc(100% - 26px)}header{height:68px}nav{display:none}.hero{padding:80px 0 70px}h1{font-size:clamp(61px,18vw,95px)}.hero-grid{grid-template-columns:1fr;gap:28px}.lead{font-size:15px}.section{padding:78px 0}.section-head{display:block}.section-head h2{font-size:40px;margin-bottom:7px}.toolbar{grid-template-columns:1fr auto}.toolbar .search{grid-column:1/-1}.stats{grid-template-columns:1fr 1fr}.stats .stat:last-child{display:none}.row{grid-template-columns:30px minmax(0,1fr) auto;min-height:82px}.kind{display:none}.domain{font-size:22px}.contact{padding:45px 23px}.contact h2{font-size:52px}footer{gap:8px;flex-direction:column}.spotlight{padding:23px}.spot-name{font-size:42px}}
+
+/* DOMAINZAX 2.0 — premium motion system */
+::selection{background:rgba(117,104,255,.45);color:#fff}
+body{background:#05060a}
+body:after{content:"";position:fixed;inset:0;pointer-events:none;z-index:100;background:linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px);background-size:100% 4px;opacity:.18;mix-blend-mode:overlay}
+body:before{animation:aurora 14s ease-in-out infinite alternate;transform:scale(1.08)}
+header{border-bottom-color:rgba(255,255,255,.08);box-shadow:0 8px 40px rgba(0,0,0,.12)}
+.logo{transition:transform .35s cubic-bezier(.2,.8,.2,1)}.logo:hover{transform:translateY(-2px) scale(1.02)}
+.hero{position:relative;padding:125px 0 105px}
+.hero:before{content:"";position:absolute;left:50%;top:8%;width:520px;height:520px;transform:translateX(-50%);background:radial-gradient(circle,rgba(117,104,255,.13),transparent 68%);filter:blur(20px);z-index:-1;animation:pulseOrb 7s ease-in-out infinite}
+.eyebrow{animation:rise .8s both}
+h1{animation:rise 1s .08s both}
+.hero-grid{animation:rise 1s .18s both}
+.primary,.ghost,.toolbtn,.smartpill,.filter,.channel{transition:transform .3s cubic-bezier(.2,.8,.2,1),border-color .3s,box-shadow .3s,background .3s}
+.primary:hover,.ghost:hover,.toolbtn:hover,.smartpill:hover,.filter:hover,.channel:hover{transform:translateY(-3px)}
+.primary:hover{box-shadow:0 12px 35px rgba(117,104,255,.25)}
+.ticker{background:linear-gradient(90deg,rgba(117,104,255,.025),rgba(0,213,255,.035),rgba(255,75,200,.025));}
+.ticker-track{animation:marquee 22s linear infinite}
+.section{position:relative}
+.section:before{content:"";position:absolute;left:0;right:0;top:45px;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.07),transparent)}
+.spotlight{border-color:rgba(117,104,255,.28);box-shadow:inset 0 1px rgba(255,255,255,.04),0 30px 90px rgba(0,0,0,.22);transition:transform .6s cubic-bezier(.2,.8,.2,1),box-shadow .6s}
+.spotlight:hover{transform:translateY(-5px);box-shadow:inset 0 1px rgba(255,255,255,.06),0 40px 110px rgba(117,104,255,.12)}
+.spot-name{animation:spotIn .6s both}
+.row{transition:transform .35s,background .35s,border-color .35s;padding-right:10px}
+.row:hover{transform:translateX(7px);background:linear-gradient(90deg,rgba(117,104,255,.06),transparent 75%);border-color:rgba(117,104,255,.22)}
+.row:before{transition:.6s cubic-bezier(.2,.8,.2,1)}
+.domain{transition:color .25s,letter-spacing .25s}.row:hover .domain{letter-spacing:-.045em}
+.num{transition:color .3s}.row:hover .num{color:var(--a)}
+.acquire{transition:transform .3s,color .3s}.row:hover .acquire{transform:translateX(-4px);color:#fff}
+.stat{transition:transform .35s,border-color .35s,background .35s}.stat:hover{transform:translateY(-4px);border-color:rgba(117,104,255,.25);background:#0d111b}
+.contact{box-shadow:0 35px 100px rgba(0,0,0,.2);border-color:rgba(255,255,255,.09)}
+.contact:before{content:"";position:absolute;width:280px;height:280px;right:-80px;top:-100px;border-radius:50%;background:radial-gradient(circle,rgba(0,213,255,.16),transparent 70%);animation:floatOrb 8s ease-in-out infinite}
+.panel{box-shadow:0 35px 120px rgba(0,0,0,.6);animation:modalIn .35s cubic-bezier(.2,.8,.2,1)}
+.signal i,.signal{animation:signalPulse 2.4s ease-in-out infinite}
+@keyframes rise{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
+@keyframes spotIn{from{opacity:0;transform:translateY(10px);filter:blur(4px)}to{opacity:1;transform:none;filter:none}}
+@keyframes aurora{0%{transform:translate3d(-2%,0,0) scale(1.08)}50%{transform:translate3d(2%,-1%,0) scale(1.12)}100%{transform:translate3d(-1%,2%,0) scale(1.08)}}
+@keyframes pulseOrb{0%,100%{opacity:.5;transform:translateX(-50%) scale(.9)}50%{opacity:1;transform:translateX(-50%) scale(1.12)}}
+@keyframes floatOrb{0%,100%{transform:translate(0,0)}50%{transform:translate(-25px,20px)}}
+@keyframes signalPulse{0%,100%{opacity:.55;box-shadow:0 0 4px var(--green)}50%{opacity:1;box-shadow:0 0 16px var(--green)}}
+@keyframes modalIn{from{opacity:0;transform:translateY(18px) scale(.97)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+@media(max-width:760px){.hero{padding-top:92px}.hero:before{width:330px;height:330px}.row:hover{transform:none}.section:before{display:none}}
 </style>
 </head>
 <body>
