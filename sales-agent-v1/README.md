@@ -3,7 +3,7 @@
 Google Sheets + Apps Script email outreach workflow. This repository contains a safe-by-default starter implementation; it does not connect to your Google account or send anything until you deploy it and explicitly enable sending.
 
 ## Files
-- `Code.gs`: spreadsheet setup, candidate domain seeding, draft generation, gated Gmail sending, follow-up logic, suppression list, activity log.
+- `Code.gs`: spreadsheet setup, candidate domain seeding, draft generation, test-only email routing, gated Gmail sending, follow-up logic, suppression list, activity log.
 - `Domains.csv`: 19 owned domains are listed; `Domainzax.com` is retained as the brand and marked `NOT_FOR_SALE`. The other 18 are sale candidates but remain `REVIEW_REQUIRED` until each domain's sale status, asking/floor prices, and transfer route are confirmed.
 - `Prospects-template.csv`: schema for manually verified prospects.
 
@@ -16,7 +16,8 @@ Google Sheets + Apps Script email outreach workflow. This repository contains a 
 6. Review the `Domains` sheet against your registrar accounts. For any of the 18 sale candidates, only set `status=ACTIVE` after confirming current ownership and sale availability; add an asking price, a minimum price, and a valid sales/marketplace URL. Do not change `Domainzax.com` from `NOT_FOR_SALE`.
 7. Add prospects to `Prospects`. Required before draft creation: unique `prospect_id`, company, valid business email, public source URL, evidence supporting relevance, domain_match, relevance_score >= 80, `compliance_checked=YES`, and `status=READY`.
 8. Run **Generate email drafts**. Inspect each draft in `Outreach`. No email is sent at this stage.
-9. Before sending, verify the Gmail sender identity and that the public contact address/reply-to address actually works. Set the `REPLY_TO` and `PUBLIC_CONTACT_EMAIL` config values accordingly.
+9. For a safe test, keep `TEST_MODE=TRUE` and `SEND_ENABLED=FALSE`. Put your own inbox in `TEST_RECIPIENT`, keep `DAILY_SEND_CAP=1`, and run the sending cycle once. Test messages are routed only to `TEST_RECIPIENT`, have a `[DOMAINZAX TEST]` subject, are marked `TEST_SENT`, and do not trigger follow-ups. The test recipient is mandatory; if blank or invalid, no test email is sent.
+10. Before production sending, verify the Gmail sender identity and that the public contact address/reply-to address actually works. Set the `REPLY_TO` and `PUBLIC_CONTACT_EMAIL` config values accordingly.
 10. Check applicable marketing/privacy laws for each target market and document the basis for using the contact data. The `compliance_checked` field is an internal checkpoint, not legal advice.
 11. Only after all checks, set `SEND_ENABLED=TRUE` in `Config`. Then install the daily trigger. You can stop sending immediately using **Disable all sending** or set `SEND_ENABLED=FALSE`.
 
@@ -26,7 +27,7 @@ Google Sheets + Apps Script email outreach workflow. This repository contains a 
 - Relevance threshold: 80/100.
 - Maximum two follow-ups, scheduled after 5 and 10 business days.
 - Suppressed addresses are blocked.
-- Domain ownership is checked against `owned_verified=YES` and `status=ACTIVE`.
+- Production outreach requires `owned_verified=YES`, `status=ACTIVE`, a non-empty asking price, a non-empty floor price, and an HTTPS sales/marketplace URL. Test mode can preview `REVIEW_REQUIRED` domains but always hard-blocks `Domainzax.com`.
 - Prospects need a source URL and evidence; no guessed email addresses are generated.
 - LinkedIn automation is intentionally excluded; use manually reviewed drafts because automated scraping/messaging may violate platform rules.
 - The system uses built-in Google Apps Script services only. Google quotas apply and can change.
