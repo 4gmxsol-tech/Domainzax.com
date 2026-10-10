@@ -182,7 +182,7 @@ function processFirstContacts_() {
   const ss = SpreadsheetApp.getActive();
   const outSh = ss.getSheetByName(SHEETS.outreach);
   const rows = table_(outSh);
-  const sentToday = rows.filter(r => String(r.status).toUpperCase() === 'SENT' && sameLocalDay_(r.sent_at)).length;
+  const sentToday = rows.filter(r => ['SENT','TEST_SENT'].includes(String(r.status).toUpperCase()) && sameLocalDay_(r.sent_at)).length;
   let remaining = Math.max(0, Number(config_('DAILY_SEND_CAP','5')) - sentToday);
   if (!remaining) { log_('FIRST_CONTACTS','CAP_REACHED','Daily first-contact cap reached.'); return; }
 
@@ -206,7 +206,7 @@ function processFirstContacts_() {
       const targetEmail = testMode ? testRecipient : String(r.email);
       const targetSubject = testMode ? '[DOMAINZAX TEST] ' + String(r.subject) : String(r.subject);
       const targetBody = testMode
-        ? 'TEST MODE — NOT SENT TO THE PROSPECT.\\nIntended recipient: ' + String(r.email) + '\\nDomain: ' + String(r.domain) + '\\n\\n--- DRAFT PREVIEW ---\\n\\n' + body
+        ? 'TEST MODE — NOT SENT TO THE PROSPECT.\nIntended recipient: ' + String(r.email) + '\nDomain: ' + String(r.domain) + '\n\n--- DRAFT PREVIEW ---\n\n' + body
         : body;
       if (testMode) opts.replyTo = testRecipient;
       GmailApp.sendEmail(targetEmail, targetSubject, targetBody, opts);
