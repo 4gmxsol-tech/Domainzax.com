@@ -1,0 +1,2 @@
+prospect_id,company,website,contact_name,role,email,source_url,evidence,domain_match,relevance_score,compliance_checked,status,created_at
+EXAMPLE-DO-NOT-SEND,Example Company,https://example.com,First Name,Founder,contact@example.com,https://example.com/news,Replace with verified public evidence explaining relevance,TheCompute.si,0,NO,DO_NOT_SEND,
