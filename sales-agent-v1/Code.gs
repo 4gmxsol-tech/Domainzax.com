@@ -73,25 +73,25 @@ function seedCandidateDomains() {
   const existing = new Set(sh.getLastRow() > 1 ? sh.getRange(2,1,sh.getLastRow()-1,1).getValues().flat().map(v => String(v).toLowerCase().trim()) : []);
   // Candidate names surfaced in prior work. All are deliberately unverified and cannot be marketed until reviewed.
   const candidates = [
-    ['Domainzax.com','NO','REVIEW_REQUIRED','Domain sales brand','','','https://domainzax.com','Brand domain; verify registrar ownership and availability before activation',''],
-    ['Rexation.com','NO','REVIEW_REQUIRED','Brandable','','','','Previously reported acquired; verify current ownership',''],
-    ['TheCompute.si','NO','REVIEW_REQUIRED','AI / computing','','','','Prior portfolio discussion; verify current ownership',''],
-    ['TheCortex.si','NO','REVIEW_REQUIRED','AI / cognition','','','','Previously reported acquired; verify current ownership',''],
-    ['TheSpark.si','NO','REVIEW_REQUIRED','Brandable / technology','','','','Prior portfolio discussion; verify current ownership',''],
-    ['Quantification.si','NO','REVIEW_REQUIRED','Data / analytics','','','','Previously reported acquired; verify current ownership',''],
-    ['Cognitive.si','NO','REVIEW_REQUIRED','AI / cognition','','','','Previously reported acquired; verify current ownership',''],
-    ['PhysicalManipulation.com','NO','REVIEW_REQUIRED','Robotics','','','','Previously mentioned portfolio candidate; verify ownership',''],
-    ['HumanoidBehavior.com','NO','REVIEW_REQUIRED','Humanoid robotics','','','','Previously mentioned portfolio candidate; verify ownership',''],
-    ['RobotIntelligenceAI.com','NO','REVIEW_REQUIRED','Robotics / AI','','','','Previously mentioned portfolio candidate; verify ownership',''],
-    ['HumanoidPlanning.com','NO','REVIEW_REQUIRED','Humanoid robotics','','','','Previously mentioned portfolio candidate; verify ownership',''],
-    ['RobotEmbodiment.com','NO','REVIEW_REQUIRED','Embodied AI','','','','Previously mentioned portfolio candidate; verify ownership',''],
-    ['HumanoidContext.com','NO','REVIEW_REQUIRED','Humanoid robotics','','','','Previously mentioned portfolio candidate; verify ownership',''],
-    ['RobotStack.co','NO','REVIEW_REQUIRED','Robotics software','','','','Previously mentioned portfolio candidate; verify ownership',''],
-    ['HumanoidUI.com','NO','REVIEW_REQUIRED','Robotics UI','','','','Previously mentioned portfolio candidate; verify ownership',''],
-    ['RoboticsBehavior.com','NO','REVIEW_REQUIRED','Robotics','','','','Previously mentioned portfolio candidate; verify ownership',''],
-    ['HumanoidIntelligenceAI.com','NO','REVIEW_REQUIRED','Humanoid AI','','','','Previously mentioned portfolio candidate; verify ownership',''],
-    ['HumanoidIntelligenceLab.com','NO','REVIEW_REQUIRED','Humanoid AI','','','','Previously mentioned portfolio candidate; verify ownership',''],
-    ['WorldAgents.co','NO','REVIEW_REQUIRED','AI agents','','','','Previously mentioned portfolio candidate; verify ownership','']
+    ['Domainzax.com','YES','REVIEW_REQUIRED','Domain sales brand','','','https://domainzax.com','Brand domain; verify registrar ownership and availability before activation',''],
+    ['Rexation.com','YES','REVIEW_REQUIRED','Brandable','','','','Previously reported acquired; verify current ownership',''],
+    ['TheCompute.si','YES','REVIEW_REQUIRED','AI / computing','','','','Prior portfolio discussion; verify current ownership',''],
+    ['TheCortex.si','YES','REVIEW_REQUIRED','AI / cognition','','','','Previously reported acquired; verify current ownership',''],
+    ['TheSpark.si','YES','REVIEW_REQUIRED','Brandable / technology','','','','Prior portfolio discussion; verify current ownership',''],
+    ['Quantification.si','YES','REVIEW_REQUIRED','Data / analytics','','','','Previously reported acquired; verify current ownership',''],
+    ['Cognitive.si','YES','REVIEW_REQUIRED','AI / cognition','','','','Previously reported acquired; verify current ownership',''],
+    ['PhysicalManipulation.com','YES','REVIEW_REQUIRED','Robotics','','','','Previously mentioned portfolio candidate; verify ownership',''],
+    ['HumanoidBehavior.com','YES','REVIEW_REQUIRED','Humanoid robotics','','','','Previously mentioned portfolio candidate; verify ownership',''],
+    ['RobotIntelligenceAI.com','YES','REVIEW_REQUIRED','Robotics / AI','','','','Previously mentioned portfolio candidate; verify ownership',''],
+    ['HumanoidPlanning.com','YES','REVIEW_REQUIRED','Humanoid robotics','','','','Previously mentioned portfolio candidate; verify ownership',''],
+    ['RobotEmbodiment.com','YES','REVIEW_REQUIRED','Embodied AI','','','','Previously mentioned portfolio candidate; verify ownership',''],
+    ['HumanoidContext.com','YES','REVIEW_REQUIRED','Humanoid robotics','','','','Previously mentioned portfolio candidate; verify ownership',''],
+    ['RobotStack.co','YES','REVIEW_REQUIRED','Robotics software','','','','Previously mentioned portfolio candidate; verify ownership',''],
+    ['HumanoidUI.com','YES','REVIEW_REQUIRED','Robotics UI','','','','Previously mentioned portfolio candidate; verify ownership',''],
+    ['RoboticsBehavior.com','YES','REVIEW_REQUIRED','Robotics','','','','Previously mentioned portfolio candidate; verify ownership',''],
+    ['HumanoidIntelligenceAI.com','YES','REVIEW_REQUIRED','Humanoid AI','','','','Previously mentioned portfolio candidate; verify ownership',''],
+    ['HumanoidIntelligenceLab.com','YES','REVIEW_REQUIRED','Humanoid AI','','','','Previously mentioned portfolio candidate; verify ownership',''],
+    ['WorldAgents.co','YES','REVIEW_REQUIRED','AI agents','','','','Previously mentioned portfolio candidate; verify ownership','']
   ];
   const rows = candidates.filter(r => !existing.has(r[0].toLowerCase()));
   if (rows.length) sh.getRange(sh.getLastRow()+1,1,rows.length,HEADERS.Domains.length).setValues(rows);
