@@ -23,7 +23,9 @@ const HEADERS = {
 };
 
 const DEFAULT_CONFIG = [
-  ['SEND_ENABLED','FALSE','Must be TRUE to allow sending. Keep FALSE during setup and testing.'],
+  ['SEND_ENABLED','FALSE','Must be TRUE for real prospect emails. Keep FALSE during testing.'],
+  ['TEST_MODE','TRUE','TRUE redirects test runs only to TEST_RECIPIENT and never to prospects. Set FALSE before approved production sending.'],
+  ['TEST_RECIPIENT','','Your own email address for test delivery; required while TEST_MODE is TRUE.']
   ['DAILY_SEND_CAP','5','Hard cap for new first-contact emails per day.'],
   ['MIN_RELEVANCE_SCORE','80','Minimum prospect relevance score (0-100) for sending.'],
   ['FOLLOWUP1_BUSINESS_DAYS','5','First follow-up after this many business days, only if no reply.'],
@@ -60,9 +62,9 @@ function setupAgent() {
     }
   });
   const cfg = ss.getSheetByName(SHEETS.config);
-  if (cfg.getLastRow() < 2) {
-    cfg.getRange(2,1,DEFAULT_CONFIG.length,3).setValues(DEFAULT_CONFIG);
-  }
+  const existingConfigKeys = new Set(cfg.getLastRow() >= 2 ? cfg.getRange(2,1,cfg.getLastRow()-1,1).getValues().flat().map(v => String(v)) : []);
+  const missingConfig = DEFAULT_CONFIG.filter(row => !existingConfigKeys.has(row[0]));
+  if (missingConfig.length) cfg.getRange(cfg.getLastRow()+1,1,missingConfig.length,3).setValues(missingConfig);
   log_('SETUP','OK','Sheets and safe defaults created. Sending is disabled.');
   SpreadsheetApp.getUi().alert('Setup complete. SEND_ENABLED is FALSE. Verify domain ownership, mailbox, prospect sources, and compliance before enabling sending.');
 }
@@ -118,7 +120,7 @@ function generateDrafts() {
     if (String(p.status).toUpperCase() !== 'READY') return;
     const domain = String(p.domain_match || '').trim().toLowerCase();
     const d = domains.find(x => String(x.domain).trim().toLowerCase() === domain);
-    if (!d || !isEligibleForOutreach_(d)) return;
+    if (!d || !isEligibleForDraft_(d)) return;
     const score = Number(p.relevance_score || 0);
     if (score < Number(config_('MIN_RELEVANCE_SCORE','80'))) return;
     if (!validEmail_(p.email) || !p.source_url || !p.evidence || String(p.compliance_checked).toUpperCase() !== 'YES') return;
@@ -167,8 +169,14 @@ function runDailyCycle() {
 }
 
 function processFirstContacts_() {
-  if (String(config_('SEND_ENABLED','FALSE')).toUpperCase() !== 'TRUE') {
+  const testMode = String(config_('TEST_MODE','TRUE')).toUpperCase() === 'TRUE';
+  if (!testMode && String(config_('SEND_ENABLED','FALSE')).toUpperCase() !== 'TRUE') {
     log_('FIRST_CONTACTS','SAFE_STOP','SEND_ENABLED is not TRUE. No messages sent.');
+    return;
+  }
+  const testRecipient = String(config_('TEST_RECIPIENT','')).trim();
+  if (testMode && !validEmail_(testRecipient)) {
+    log_('FIRST_CONTACTS','SAFE_STOP','TEST_MODE is TRUE but TEST_RECIPIENT is missing or invalid. No messages sent.');
     return;
   }
   const ss = SpreadsheetApp.getActive();
@@ -187,7 +195,7 @@ function processFirstContacts_() {
     if (String(r.status).toUpperCase() !== 'DRAFT') continue;
     const p = prospectById[String(r.prospect_id)];
     const d = domainByName[String(r.domain).toLowerCase()];
-    if (!p || !d || !isEligibleForOutreach_(d)) { updateOutreach_(i+2,7,'BLOCKED_DOMAIN_NOT_VERIFIED','Domain excluded from sale, or ownership/status not approved.'); continue; }
+    if (!p || !d || !(testMode ? isEligibleForDraft_(d) : isEligibleForOutreach_(d))) { updateOutreach_(i+2,7,'BLOCKED_DOMAIN_NOT_VERIFIED','Domain excluded from sale, or ownership/status/sale details not approved.'); continue; }
     if (Number(p.relevance_score || 0) < Number(config_('MIN_RELEVANCE_SCORE','80')) || String(p.compliance_checked).toUpperCase() !== 'YES' || !p.source_url || !p.evidence) { updateOutreach_(i+2,7,'BLOCKED_REVIEW','Missing score, evidence, source, or compliance check.'); continue; }
     if (!validEmail_(r.email) || isSuppressed_(r.email)) { updateOutreach_(i+2,7,'BLOCKED_EMAIL_OR_SUPPRESSION','Invalid email or suppressed recipient.'); continue; }
     if (hasPriorOutreach_(r.email, r.domain, r.outreach_id)) { updateOutreach_(i+2,7,'BLOCKED_DUPLICATE','Existing outreach found for recipient/domain.'); continue; }
@@ -195,14 +203,20 @@ function processFirstContacts_() {
     if (!body || body.indexOf('Context: https://') < 0 || body.indexOf('unsubscribe') < 0) { updateOutreach_(i+2,7,'BLOCKED_MESSAGE_CHECK','Required source or opt-out wording missing.'); continue; }
     try {
       const opts = {name:config_('SENDER_NAME','Zax | DomainZax'), replyTo:config_('REPLY_TO','sales@domainzax.com')};
-      GmailApp.sendEmail(String(r.email), String(r.subject), body, opts);
+      const targetEmail = testMode ? testRecipient : String(r.email);
+      const targetSubject = testMode ? '[DOMAINZAX TEST] ' + String(r.subject) : String(r.subject);
+      const targetBody = testMode
+        ? 'TEST MODE — NOT SENT TO THE PROSPECT.\\nIntended recipient: ' + String(r.email) + '\\nDomain: ' + String(r.domain) + '\\n\\n--- DRAFT PREVIEW ---\\n\\n' + body
+        : body;
+      if (testMode) opts.replyTo = testRecipient;
+      GmailApp.sendEmail(targetEmail, targetSubject, targetBody, opts);
       Utilities.sleep(800);
-      const thread = findSentThread_(r.email, r.subject);
-      updateOutreach_(i+2,7,'SENT','');
+      const thread = testMode ? null : findSentThread_(r.email, r.subject);
+      updateOutreach_(i+2,7,testMode ? 'TEST_SENT' : 'SENT','');
       updateOutreach_(i+2,8,new Date(),'');
       if (thread) updateOutreach_(i+2,9,thread.getId(),'');
       updateOutreach_(i+2,12,new Date(),'');
-      log_('SEND_FIRST','SENT',r.email+' | '+r.domain);
+      log_(testMode ? 'TEST_SEND' : 'SEND_FIRST',testMode ? 'TEST_SENT' : 'SENT',targetEmail+' | intended: '+r.email+' | '+r.domain);
       remaining--;
     } catch (e) {
       updateOutreach_(i+2,7,'SEND_ERROR',String(e));
@@ -242,6 +256,10 @@ function processRepliesAndSuppressions_() {
 }
 
 function processFollowups_() {
+  if (String(config_('TEST_MODE','TRUE')).toUpperCase() === 'TRUE') {
+    log_('FOLLOWUPS','SAFE_STOP','Test mode enabled; no follow-ups sent.');
+    return;
+  }
   if (String(config_('SEND_ENABLED','FALSE')).toUpperCase() !== 'TRUE') return;
   const ss = SpreadsheetApp.getActive();
   const sh = ss.getSheetByName(SHEETS.outreach);
@@ -380,11 +398,24 @@ function updateOutreachById_(id,col,value) {
   const i=rows.findIndex(r=>String(r.outreach_id)===String(id));
   if(i>=0) sh.getRange(i+2,col).setValue(value);
 }
+function isEligibleForDraft_(d) {
+  const domain = String(d.domain || '').trim().toLowerCase();
+  // Hard exclusion: the retained brand is never a sales candidate, even in test mode.
+  if (domain === 'domainzax.com') return false;
+  if (String(d.owned_verified).toUpperCase() !== 'YES') return false;
+  const status = String(d.status).toUpperCase();
+  return status === 'ACTIVE' || (String(config_('TEST_MODE','TRUE')).toUpperCase() === 'TRUE' && status === 'REVIEW_REQUIRED');
+}
 function isEligibleForOutreach_(d) {
   const domain = String(d.domain || '').trim().toLowerCase();
   // Hard exclusion: this domain is the retained brand, even if a sheet row is edited accidentally.
   if (domain === 'domainzax.com') return false;
-  return String(d.owned_verified).toUpperCase() === 'YES' && String(d.status).toUpperCase() === 'ACTIVE';
+  const askingPrice = String(d.asking_price || '').trim();
+  const floorPrice = String(d.floor_price || '').trim();
+  const listingUrl = String(d.marketplace_url || '').trim();
+  return String(d.owned_verified).toUpperCase() === 'YES' &&
+    String(d.status).toUpperCase() === 'ACTIVE' &&
+    askingPrice !== '' && floorPrice !== '' && /^https:\/\//i.test(listingUrl);
 }
 function validEmail_(email) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(email||'').trim()); }
 function sameLocalDay_(v) {
