@@ -19,7 +19,7 @@ Google Sheets + Apps Script email outreach workflow. This repository contains a 
 9. For a safe test, keep `TEST_MODE=TRUE` and `SEND_ENABLED=FALSE`. Put your own inbox in `TEST_RECIPIENT`, keep `DAILY_SEND_CAP=1`, and run the sending cycle once. Test messages are routed only to `TEST_RECIPIENT`, have a `[DOMAINZAX TEST]` subject, are marked `TEST_SENT`, and do not trigger follow-ups. The test recipient is mandatory; if blank or invalid, no test email is sent.
 10. Before production sending, verify the Gmail sender identity and that the public contact address/reply-to address actually works. Set the `REPLY_TO` and `PUBLIC_CONTACT_EMAIL` config values accordingly.
 10. Check applicable marketing/privacy laws for each target market and document the basis for using the contact data. The `compliance_checked` field is an internal checkpoint, not legal advice.
-11. Only after all checks, set `SEND_ENABLED=TRUE` in `Config`. Then install the daily trigger. You can stop sending immediately using **Disable all sending** or set `SEND_ENABLED=FALSE`.
+11. Only after all checks, set `TEST_MODE=FALSE` and `SEND_ENABLED=TRUE` in `Config`. Then install the daily trigger. You can stop sending immediately using **Disable all sending** or set `SEND_ENABLED=FALSE`.
 
 ## Safety defaults and limits
 - Sending is disabled by default.
