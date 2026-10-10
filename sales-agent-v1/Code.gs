@@ -73,7 +73,7 @@ function seedCandidateDomains() {
   const existing = new Set(sh.getLastRow() > 1 ? sh.getRange(2,1,sh.getLastRow()-1,1).getValues().flat().map(v => String(v).toLowerCase().trim()) : []);
   // Candidate names surfaced in prior work. All are deliberately unverified and cannot be marketed until reviewed.
   const candidates = [
-    ['Domainzax.com','YES','REVIEW_REQUIRED','Domain sales brand','','','https://domainzax.com','Brand domain; verify registrar ownership and availability before activation',''],
+    ['Domainzax.com','YES','NOT_FOR_SALE','Brand / retained asset','','','','Retained as the DomainZax brand; excluded from all sales outreach',''],
     ['Rexation.com','YES','REVIEW_REQUIRED','Brandable','','','','Previously reported acquired; verify current ownership',''],
     ['TheCompute.si','YES','REVIEW_REQUIRED','AI / computing','','','','Prior portfolio discussion; verify current ownership',''],
     ['TheCortex.si','YES','REVIEW_REQUIRED','AI / cognition','','','','Previously reported acquired; verify current ownership',''],
@@ -95,8 +95,15 @@ function seedCandidateDomains() {
   ];
   const rows = candidates.filter(r => !existing.has(r[0].toLowerCase()));
   if (rows.length) sh.getRange(sh.getLastRow()+1,1,rows.length,HEADERS.Domains.length).setValues(rows);
-  log_('SEED_DOMAINS','OK',rows.length + ' candidate rows added; all set to NO / REVIEW_REQUIRED.');
-  SpreadsheetApp.getUi().alert(rows.length + ' candidate rows added. Every row is unverified and blocked from outreach until you confirm ownership and change owned_verified to YES and status to ACTIVE.');
+  // Enforce the brand exclusion even if this row already existed from an earlier seed.
+  const currentDomains = table_(sh);
+  const brandIndex = currentDomains.findIndex(r => String(r.domain).trim().toLowerCase() === 'domainzax.com');
+  if (brandIndex >= 0) {
+    sh.getRange(brandIndex+2,3).setValue('NOT_FOR_SALE');
+    sh.getRange(brandIndex+2,8).setValue('Retained as the DomainZax brand; excluded from all sales outreach');
+  }
+  log_('SEED_DOMAINS','OK',rows.length + ' candidate rows added; Domainzax.com is excluded from sale.');
+  SpreadsheetApp.getUi().alert(rows.length + ' candidate rows added. Domainzax.com is retained as the brand and excluded from outreach. The other domains remain blocked until sale details are reviewed and approved.');
 }
 
 function generateDrafts() {
@@ -111,7 +118,7 @@ function generateDrafts() {
     if (String(p.status).toUpperCase() !== 'READY') return;
     const domain = String(p.domain_match || '').trim().toLowerCase();
     const d = domains.find(x => String(x.domain).trim().toLowerCase() === domain);
-    if (!d || String(d.owned_verified).toUpperCase() !== 'YES' || String(d.status).toUpperCase() !== 'ACTIVE') return;
+    if (!d || !isEligibleForOutreach_(d)) return;
     const score = Number(p.relevance_score || 0);
     if (score < Number(config_('MIN_RELEVANCE_SCORE','80'))) return;
     if (!validEmail_(p.email) || !p.source_url || !p.evidence || String(p.compliance_checked).toUpperCase() !== 'YES') return;
@@ -180,7 +187,7 @@ function processFirstContacts_() {
     if (String(r.status).toUpperCase() !== 'DRAFT') continue;
     const p = prospectById[String(r.prospect_id)];
     const d = domainByName[String(r.domain).toLowerCase()];
-    if (!p || !d || String(d.owned_verified).toUpperCase() !== 'YES' || String(d.status).toUpperCase() !== 'ACTIVE') { updateOutreach_(i+2,7,'BLOCKED_DOMAIN_NOT_VERIFIED','Domain ownership/status not verified.'); continue; }
+    if (!p || !d || !isEligibleForOutreach_(d)) { updateOutreach_(i+2,7,'BLOCKED_DOMAIN_NOT_VERIFIED','Domain excluded from sale, or ownership/status not approved.'); continue; }
     if (Number(p.relevance_score || 0) < Number(config_('MIN_RELEVANCE_SCORE','80')) || String(p.compliance_checked).toUpperCase() !== 'YES' || !p.source_url || !p.evidence) { updateOutreach_(i+2,7,'BLOCKED_REVIEW','Missing score, evidence, source, or compliance check.'); continue; }
     if (!validEmail_(r.email) || isSuppressed_(r.email)) { updateOutreach_(i+2,7,'BLOCKED_EMAIL_OR_SUPPRESSION','Invalid email or suppressed recipient.'); continue; }
     if (hasPriorOutreach_(r.email, r.domain, r.outreach_id)) { updateOutreach_(i+2,7,'BLOCKED_DUPLICATE','Existing outreach found for recipient/domain.'); continue; }
@@ -372,6 +379,12 @@ function updateOutreachById_(id,col,value) {
   const rows=table_(sh);
   const i=rows.findIndex(r=>String(r.outreach_id)===String(id));
   if(i>=0) sh.getRange(i+2,col).setValue(value);
+}
+function isEligibleForOutreach_(d) {
+  const domain = String(d.domain || '').trim().toLowerCase();
+  // Hard exclusion: this domain is the retained brand, even if a sheet row is edited accidentally.
+  if (domain === 'domainzax.com') return false;
+  return String(d.owned_verified).toUpperCase() === 'YES' && String(d.status).toUpperCase() === 'ACTIVE';
 }
 function validEmail_(email) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(email||'').trim()); }
 function sameLocalDay_(v) {
