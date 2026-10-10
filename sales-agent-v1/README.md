@@ -4,7 +4,7 @@ Google Sheets + Apps Script email outreach workflow. This repository contains a 
 
 ## Files
 - `Code.gs`: spreadsheet setup, candidate domain seeding, draft generation, gated Gmail sending, follow-up logic, suppression list, activity log.
-- `Domains.csv`: candidate portfolio to review. Ownership was confirmed by the portfolio owner in chat; all entries remain REVIEW_REQUIRED until sale status, price, and transfer route are confirmed.
+- `Domains.csv`: 19 owned domains are listed; `Domainzax.com` is retained as the brand and marked `NOT_FOR_SALE`. The other 18 are sale candidates but remain `REVIEW_REQUIRED` until each domain's sale status, asking/floor prices, and transfer route are confirmed.
 - `Prospects-template.csv`: schema for manually verified prospects.
 
 ## Setup
@@ -12,8 +12,8 @@ Google Sheets + Apps Script email outreach workflow. This repository contains a 
 2. Open **Extensions → Apps Script**.
 3. Replace the editor contents with `Code.gs` from this folder and save.
 4. Reload the spreadsheet; use **DomainZax Agent → 1. Set up / repair sheets**.
-5. Use **DomainZax Agent → 2. Seed candidate domain list**. Candidate domains are seeded with `owned_verified=YES` based on the owner's confirmation, and `status=REVIEW_REQUIRED`; they cannot be marketed until sale status, asking price, and transfer route are confirmed.
-6. Review the `Domains` sheet against your registrar accounts. Only set `owned_verified=YES` and `status=ACTIVE` after you confirm the domain is currently owned and available for sale. Add an asking price, a minimum price, and a valid sales/marketplace URL.
+5. Use **DomainZax Agent → 2. Seed candidate domain list**. The 18 sale candidates are seeded with `owned_verified=YES` based on the owner's confirmation and `status=REVIEW_REQUIRED`. `Domainzax.com` is retained as the brand, set to `NOT_FOR_SALE`, and explicitly excluded from sales outreach.
+6. Review the `Domains` sheet against your registrar accounts. For any of the 18 sale candidates, only set `status=ACTIVE` after confirming current ownership and sale availability; add an asking price, a minimum price, and a valid sales/marketplace URL. Do not change `Domainzax.com` from `NOT_FOR_SALE`.
 7. Add prospects to `Prospects`. Required before draft creation: unique `prospect_id`, company, valid business email, public source URL, evidence supporting relevance, domain_match, relevance_score >= 80, `compliance_checked=YES`, and `status=READY`.
 8. Run **Generate email drafts**. Inspect each draft in `Outreach`. No email is sent at this stage.
 9. Before sending, verify the Gmail sender identity and that the public contact address/reply-to address actually works. Set the `REPLY_TO` and `PUBLIC_CONTACT_EMAIL` config values accordingly.
