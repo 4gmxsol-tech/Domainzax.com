@@ -151,6 +151,7 @@ function runDailyCycle() {
   const lock = LockService.getScriptLock();
   if (!lock.tryLock(10000)) throw new Error('Another agent cycle is already running.');
   try {
+    processRepliesAndSuppressions_();
     processFollowups_();
     processFirstContacts_();
   } finally {
@@ -203,6 +204,36 @@ function processFirstContacts_() {
   }
 }
 
+
+function processRepliesAndSuppressions_() {
+  const ss=SpreadsheetApp.getActive();
+  const rows=table_(ss.getSheetByName(SHEETS.outreach));
+  for (const r of rows) {
+    if (!r.gmail_thread_id || !['SENT','FOLLOWUP1_SENT','FOLLOWUP2_SENT'].includes(String(r.status).toUpperCase())) continue;
+    let thread=null;
+    try { thread=GmailApp.getThreadById(String(r.gmail_thread_id)); } catch(e) {}
+    if (!thread) continue;
+    const me=String(Session.getEffectiveUser().getEmail()||'').toLowerCase();
+    const messages=thread.getMessages();
+    const replies=messages.filter(m => String(m.getFrom()).toLowerCase().indexOf(me)<0 && asDate_(r.sent_at) && m.getDate()>asDate_(r.sent_at));
+    if (!replies.length) continue;
+    const latest=replies[replies.length-1];
+    const text=String(latest.getPlainBody()||'').toLowerCase();
+    const optOut=/(unsubscribe|opt.?out|remove me|stop emailing|stop contacting|do not contact|don't contact|no more emails|no thanks|not interested|désinscri|ne me contactez plus|stop sending)/i.test(text);
+    if (optOut && !isSuppressed_(r.email)) {
+      addSuppression(r.email,'Opt-out or refusal detected in reply',r.prospect_id,'Gmail thread '+r.gmail_thread_id);
+      log_('REPLY_SCAN','SUPPRESSED',r.email+' | detected opt-out/refusal');
+    }
+    const sh=ss.getSheetByName(SHEETS.outreach);
+    const all=table_(sh);
+    const idx=all.findIndex(x=>String(x.outreach_id)===String(r.outreach_id));
+    if (idx>=0) {
+      sh.getRange(idx+2,7).setValue(optOut?'SUPPRESSED':'REPLY_RECEIVED');
+      sh.getRange(idx+2,13).setValue(optOut?'Reply opt-out/refusal detected; suppressed.':'Reply detected; automatic follow-ups stopped. Review reply manually.');
+    }
+  }
+}
+
 function processFollowups_() {
   if (String(config_('SEND_ENABLED','FALSE')).toUpperCase() !== 'TRUE') return;
   const ss = SpreadsheetApp.getActive();
@@ -220,7 +251,7 @@ function processFollowups_() {
       if (hasReply_(r)) updateOutreach_(i+2,7,'REPLY_RECEIVED','Reply detected; automated follow-up stopped.');
       continue;
     }
-    const sentAt = status==='SENT' ? asDate_(r.sent_at) : asDate_(r.followup1_at);
+    const sentAt = asDate_(r.sent_at); // Both follow-ups are timed from the original first-contact date.
     if (!sentAt) continue;
     const age = businessDaysBetween_(sentAt,new Date());
     const maxFollowups=Number(config_('MAX_FOLLOWUPS','2'));
