@@ -30,6 +30,13 @@ footer{display:flex;justify-content:space-between;gap:12px;border-top:1px solid 
 @media(max-width:900px){.list{grid-template-columns:repeat(2,minmax(0,1fr))}.hero-grid{grid-template-columns:1fr;gap:26px}.hero{padding-top:93px}.section{padding:80px 0}}
 @media(max-width:650px){.wrap{width:calc(100% - 28px)}header{height:68px}nav{display:none}.hero{padding:77px 0 69px}h1{font-size:clamp(60px,16.5vw,98px)}.lead{font-size:14px}.hero-grid{margin-top:30px}.section{padding:69px 0}.section-head{align-items:start;flex-direction:column}.section-note{text-align:left}.spotlight{padding:23px;border-radius:23px}.spot-name{font-size:40px}.toolbar{grid-template-columns:1fr auto}.toolbar .search{grid-column:1/-1}.toolbtn{padding:10px 12px}.stats{grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}.stat{padding:13px 10px}.stat strong{font-size:23px}.stat span{font-size:7px;letter-spacing:.08em}.list{grid-template-columns:1fr}.asset{min-height:220px;padding:20px}.asset-domain{font-size:30px}.contact{padding:42px 23px;border-radius:25px}.contact h2{font-size:53px}footer{flex-direction:column}.ticker-track{animation-duration:26s}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}.asset{opacity:1;transform:none}}
+
+/* Extra polish: subtle pointer-reactive light and observed section reveals. */
+.asset:after,.spotlight:before{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(280px circle at var(--pointer-x,50%) var(--pointer-y,0%),rgba(141,123,255,.10),transparent 70%);opacity:0;transition:opacity .25s;z-index:0}
+.asset:hover:after,.spotlight:hover:before{opacity:1}
+.motion-ready{opacity:0;transform:translateY(16px);transition:opacity .7s ease var(--motion-delay,0ms),transform .7s cubic-bezier(.2,.8,.2,1) var(--motion-delay,0ms)}
+.motion-ready.motion-visible{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){.motion-ready{opacity:1;transform:none;transition:none}}
 </style>
 </head>
 <body>
@@ -111,5 +118,5 @@ $("total").textContent=domains.length;$("siCount").textContent=domains.filter(d=
 render();setSpotlight();window.addEventListener("scroll",revealCards,{passive:true});window.addEventListener("resize",revealCards);
 if("IntersectionObserver"in window){const observer=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add("reveal");observer.unobserve(entry.target)}}),{threshold:.05});const observeAssets=()=>document.querySelectorAll(".asset:not(.reveal)").forEach(el=>observer.observe(el));observeAssets();const originalRender=render;render=function(){originalRender();observeAssets()};}
 </script>
-</body>
+<script src="/assets/domainzax-motion.js" defer></script>\n</body>
 </html>
