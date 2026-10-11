@@ -28,6 +28,23 @@ footer{display:flex;justify-content:space-between;gap:12px;border-top:1px solid 
 .modal{position:fixed;inset:0;z-index:50;display:grid;place-items:center;padding:20px;background:#03040bbd;backdrop-filter:blur(15px);opacity:0;visibility:hidden;transition:opacity .25s,visibility .25s}.modal.open{opacity:1;visibility:visible}.modal-panel{width:min(650px,100%);max-height:min(90vh,760px);overflow:auto;border:1px solid #32384b;border-radius:27px;padding:29px;background:#0c0e18;box-shadow:0 35px 120px #000b;transform:translateY(15px) scale(.98);transition:transform .3s}.modal.open .modal-panel{transform:none}.modal-head{display:flex;align-items:center;justify-content:space-between}.modal-kicker{font-size:9px;color:var(--mint);font-weight:900;letter-spacing:.16em;text-transform:uppercase}.close{width:36px;height:36px;border:1px solid var(--line);border-radius:50%;background:transparent;color:#fff;font-size:20px;cursor:pointer}.modal h3{font-size:clamp(34px,6vw,60px);letter-spacing:-.08em;overflow-wrap:anywhere;margin:18px 0 7px}.modal-type{font-size:9px;color:#7c879b;text-transform:uppercase;letter-spacing:.13em}.modal p{font-size:13px;color:var(--muted);line-height:1.8}.modal-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:23px}
 @keyframes rise{from{opacity:0;transform:translateY(23px)}to{opacity:1;transform:none}}@keyframes gradient{to{background-position:200% center}}@keyframes marquee{to{transform:translateX(-50%)}}@keyframes aurora{0%{transform:translate(-1%,0) scale(1.03)}100%{transform:translate(2%,-2%) scale(1.12)}}@keyframes orb{0%,100%{opacity:.65;transform:scale(.92) translateY(0)}50%{opacity:1;transform:scale(1.1) translateY(13px)}}@keyframes dotPulse{0%,100%{opacity:.55;box-shadow:0 0 3px #95f3cc}50%{opacity:1;box-shadow:0 0 15px #95f3cc}}
 @media(max-width:900px){.list{grid-template-columns:repeat(2,minmax(0,1fr))}.hero-grid{grid-template-columns:1fr;gap:26px}.hero{padding-top:93px}.section{padding:80px 0}}
+
+/* Functional polish and clearer mobile portfolio layout */
+.asset-domain{font:inherit;font-size:clamp(22px,2.2vw,30px);font-weight:950;letter-spacing:-.065em;line-height:1.08;margin:26px 0 12px;overflow-wrap:anywhere;cursor:pointer;color:var(--text);text-align:left;padding:0;border:0;background:transparent}
+.asset-domain:focus-visible,.btn:focus-visible,.filter:focus-visible,.sortbtn:focus-visible,.toolbtn:focus-visible{outline:2px solid var(--cyan);outline-offset:4px}
+@media(max-width:650px){
+  .list{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+  .asset{min-height:225px;padding:15px;border-radius:18px;opacity:1;transform:none}
+  .asset-domain{font-size:clamp(17px,4.4vw,23px);margin:23px 0 10px}
+  .asset-desc{font-size:10px;line-height:1.55}
+  .asset-bottom{align-items:flex-start;flex-direction:column}
+  .asset-cta{padding-top:5px}
+  .filterbar{padding-bottom:10px}
+  .filterbar::-webkit-scrollbar{height:3px}
+  .toolbar{grid-template-columns:minmax(0,1fr) auto}
+  .toolbar .search{grid-column:1/-1}
+}
+@media(max-width:390px){.list{grid-template-columns:1fr}.asset{min-height:190px}.asset-bottom{align-items:center;flex-direction:row}}
 @media(max-width:650px){.wrap{width:calc(100% - 28px)}header{height:68px}nav{display:none}.hero{padding:77px 0 69px}h1{font-size:clamp(60px,16.5vw,98px)}.lead{font-size:14px}.hero-grid{margin-top:30px}.section{padding:69px 0}.section-head{align-items:start;flex-direction:column}.section-note{text-align:left}.spotlight{padding:23px;border-radius:23px}.spot-name{font-size:40px}.toolbar{grid-template-columns:1fr auto}.toolbar .search{grid-column:1/-1}.toolbtn{padding:10px 12px}.stats{grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}.stat{padding:13px 10px}.stat strong{font-size:23px}.stat span{font-size:7px;letter-spacing:.08em}.list{grid-template-columns:1fr}.asset{min-height:220px;padding:20px}.asset-domain{font-size:30px}.contact{padding:42px 23px;border-radius:25px}.contact h2{font-size:53px}footer{flex-direction:column}.ticker-track{animation-duration:26s}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}.asset{opacity:1;transform:none}}
 
@@ -101,28 +118,143 @@ const domains = [
  {name:"aividyou.com",ext:"com",description:"A playful AI brandable with possibilities in media, computer vision, video or creator products.",tags:["AI","Media",".COM"]},
  {name:"Domainzax.si",ext:"si",description:"A localized Domainzax identity for a Slovenia-focused domain and digital asset initiative.",tags:["Domainzax",".SI","Brand"]}
 ];
-let activeFilter="all",searchQuery="",sortMode="featured",spotIndex=0,currentDomain=null;
-const $=id=>document.getElementById(id);const list=$("list");
-function matches(d){const hay=(d.name+" "+d.ext+" "+d.description+" "+d.tags.join(" ")).toLowerCase();if(searchQuery&&!hay.includes(searchQuery))return false;switch(activeFilter){case"com":return d.name.toLowerCase().endsWith(".com");case"si":return d.name.toLowerCase().endsWith(".si");case"ai":return /\bai\b|cognit|comput|intelligence|agent|reason|quantif|context|tool/i.test(hay);case"robotics":return /robot|humanoid|physical|manipulation|embodiment/i.test(hay);case"brand":return /brandable|brand|memorable|short/i.test(hay);case"other":return !/\.(com|si)$/i.test(d.name);default:return true}}
-function mailto(name){return "mailto:sales@domainzax.com?subject="+encodeURIComponent("Domain acquisition inquiry — "+name)+"&body="+encodeURIComponent("Hello Domainzax,\n\nI’m interested in discussing "+name+". Please share its current availability and acquisition details.\n\nBest regards,")}
-function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
-function makeTags(tags,klass="tag"){return tags.map(t=>'<span class="'+klass+'">'+escapeHtml(t)+'</span>').join("")}
-function render(){let arr=domains.filter(matches);if(sortMode==="az")arr.sort((a,b)=>a.name.localeCompare(b.name));else if(sortMode==="short")arr.sort((a,b)=>a.name.length-b.name.length||a.name.localeCompare(b.name));else if(sortMode==="si")arr.sort((a,b)=>(b.ext==="si")-(a.ext==="si")||a.name.localeCompare(b.name));else arr.sort((a,b)=>(!!b.featured)-(!!a.featured)||a.name.localeCompare(b.name));$("result").innerHTML=arr.length+" names shown<br>Curated across AI, robotics & more";list.innerHTML=arr.length?arr.map((d,i)=>'<article class="asset" style="transition-delay:'+Math.min(i%9*45,360)+'ms"><div class="asset-top"><span class="asset-rank">ASSET / '+String(i+1).padStart(2,"0")+'</span><span class="asset-type">'+escapeHtml(d.ext==="other"?(d.name.split(".").pop()||"OTHER").toUpperCase():"."+d.ext.toUpperCase())+'</span></div><button class="asset-domain" data-open="'+escapeHtml(d.name)+'" style="border:0;background:none;color:inherit;text-align:left;padding:0;cursor:pointer">'+escapeHtml(d.name)+'</button><div class="asset-desc">'+escapeHtml(d.description)+'</div><div class="asset-bottom"><div class="asset-tags">'+makeTags(d.tags.slice(0,2),"asset-tag")+'</div><a class="asset-cta" href="'+mailto(d.name)+'">INQUIRE ↗</a></div></article>').join(""):'<div class="empty">No names match this view. Try another keyword or reset the filters.</div>';revealCards()}
-function revealCards(){document.querySelectorAll(".asset:not(.reveal)").forEach((el,i)=>{if(el.getBoundingClientRect().top<window.innerHeight*.96)el.classList.add("reveal")})}
-function showDomain(d){if(!d)return;currentDomain=d;$("mName").textContent=d.name;$("mType").textContent=d.tags.join(" · ");$("mStory").textContent=d.description;$("mTags").innerHTML=makeTags(d.tags);$("mMail").href=mailto(d.name);$("mCopy").textContent="Copy domain";$("modal").classList.add("open");$("modal").setAttribute("aria-hidden","false");$("close").focus()}
-function closeModal(){$("modal").classList.remove("open");$("modal").setAttribute("aria-hidden","true")}
-function setSpotlight(){const candidates=domains.filter(d=>d.name!=="Domainzax.com");const d=candidates[spotIndex%candidates.length];spotIndex++;$("spotName").textContent=d.name;$("spotStory").textContent=d.description;$("spotTags").innerHTML=makeTags(d.tags);$("spotOpen").onclick=()=>showDomain(d);if($("spotName").animate)$("spotName").animate([{opacity:.2,transform:"translateY(8px)"},{opacity:1,transform:"translateY(0)"}],{duration:420,easing:"cubic-bezier(.2,.8,.2,1)})}
-document.querySelectorAll("[data-filter]").forEach(b=>b.addEventListener("click",()=>{document.querySelectorAll("[data-filter]").forEach(x=>x.classList.toggle("active",x===b));activeFilter=b.dataset.filter;render()}));
-document.querySelectorAll("[data-sort]").forEach(b=>b.addEventListener("click",()=>{document.querySelectorAll("[data-sort]").forEach(x=>x.classList.toggle("active",x===b));sortMode=b.dataset.sort;render()}));
-$("search").addEventListener("input",()=>{searchQuery=$("search").value.trim().toLowerCase();render()});
-$("reset").addEventListener("click",()=>{$("search").value="";searchQuery="";activeFilter="all";sortMode="featured";document.querySelectorAll("[data-filter]").forEach(x=>x.classList.toggle("active",x.dataset.filter==="all"));document.querySelectorAll("[data-sort]").forEach(x=>x.classList.toggle("active",x.dataset.sort==="featured"));render()});
-$("random").addEventListener("click",()=>{const arr=domains.filter(matches);showDomain(arr[Math.floor(Math.random()*arr.length)]||domains[Math.floor(Math.random()*domains.length)])});
-$("spotNext").addEventListener("click",setSpotlight);list.addEventListener("click",e=>{const b=e.target.closest("[data-open]");if(b)showDomain(domains.find(d=>d.name===b.dataset.open))});
-$("close").addEventListener("click",closeModal);$("modal").addEventListener("click",e=>{if(e.target===$("modal"))closeModal()});document.addEventListener("keydown",e=>{if(e.key==="Escape")closeModal()});
-$("mCopy").addEventListener("click",async()=>{if(!currentDomain)return;try{await navigator.clipboard.writeText(currentDomain.name);$("mCopy").textContent="Copied ✓"}catch{$("mCopy").textContent=currentDomain.name}});
-$("total").textContent=domains.length;$("siCount").textContent=domains.filter(d=>d.name.toLowerCase().endsWith(".si")).length;$("techCount").textContent=domains.filter(d=>/robot|humanoid|physical|ai|cognit|comput|intelligence|agent|reason/i.test(d.name)).length;
-render();setSpotlight();window.addEventListener("scroll",revealCards,{passive:true});window.addEventListener("resize",revealCards);
-if("IntersectionObserver"in window){const observer=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add("reveal");observer.unobserve(entry.target)}}),{threshold:.05});const observeAssets=()=>document.querySelectorAll(".asset:not(.reveal)").forEach(el=>observer.observe(el));observeAssets();const originalRender=render;render=function(){originalRender();observeAssets()};}
+let activeFilter="all", searchQuery="", sortMode="featured", spotIndex=0, currentDomain=null;
+const $ = id => document.getElementById(id);
+const list = $("list");
+const filters = [...document.querySelectorAll("[data-filter]")];
+const sorts = [...document.querySelectorAll("[data-sort]")];
+
+function matches(d) {
+  const hay = (d.name+" "+d.ext+" "+d.description+" "+d.tags.join(" ")).toLowerCase();
+  if (searchQuery && !hay.includes(searchQuery)) return false;
+  switch (activeFilter) {
+    case "com": return d.name.toLowerCase().endsWith(".com");
+    case "si": return d.name.toLowerCase().endsWith(".si");
+    case "ai": return /ai|cognit|comput|intelligence|agent|reason|quantif|context|tool/i.test(hay);
+    case "robotics": return /robot|humanoid|physical|manipulation|embodiment/i.test(hay);
+    case "brand": return /brandable|brand|memorable|short/i.test(hay);
+    case "other": return !/\.(com|si)$/i.test(d.name);
+    default: return true;
+  }
+}
+function mailto(name) {
+  return "mailto:sales@domainzax.com?subject="+encodeURIComponent("Domain acquisition inquiry — "+name)+"&body="+encodeURIComponent("Hello Domainzax,\n\nI’m interested in discussing "+name+". Please share its current availability and acquisition details.\n\nBest regards,");
+}
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+function makeTags(tags, klass="tag") {
+  return tags.map(t => '<span class="'+klass+'">'+escapeHtml(t)+'</span>').join("");
+}
+function render() {
+  let arr = domains.filter(matches);
+  if (sortMode === "az") arr.sort((a,b) => a.name.localeCompare(b.name));
+  else if (sortMode === "short") arr.sort((a,b) => a.name.length-b.name.length || a.name.localeCompare(b.name));
+  else if (sortMode === "si") arr.sort((a,b) => Number(b.ext==="si")-Number(a.ext==="si") || a.name.localeCompare(b.name));
+  else arr.sort((a,b) => Number(!!b.featured)-Number(!!a.featured) || a.name.localeCompare(b.name));
+
+  $("result").textContent = arr.length+" names shown · Curated across AI, robotics & more";
+  if (!arr.length) {
+    list.innerHTML = '<div class="empty">No names match this view. Try another keyword or reset the filters.</div>';
+  } else {
+    list.innerHTML = arr.map((d,i) =>
+      '<article class="asset reveal" style="transition-delay:'+Math.min((i%6)*35,175)+'ms">'+
+      '<div class="asset-top"><span class="asset-rank">ASSET / '+String(i+1).padStart(2,"0")+'</span><span class="asset-type">'+escapeHtml(d.ext==="other"?(d.name.split(".").pop()||"OTHER").toUpperCase():"."+d.ext.toUpperCase())+'</span></div>'+
+      '<button class="asset-domain" type="button" data-open="'+escapeHtml(d.name)+'">'+escapeHtml(d.name)+'</button>'+
+      '<div class="asset-desc">'+escapeHtml(d.description)+'</div>'+
+      '<div class="asset-bottom"><div class="asset-tags">'+makeTags(d.tags.slice(0,2),"asset-tag")+'</div><a class="asset-cta" href="'+mailto(d.name)+'">INQUIRE ↗</a></div></article>'
+    ).join("");
+  }
+}
+function showDomain(d) {
+  if (!d) return;
+  currentDomain = d;
+  $("mName").textContent = d.name;
+  $("mType").textContent = d.tags.join(" · ");
+  $("mStory").textContent = d.description;
+  $("mTags").innerHTML = makeTags(d.tags);
+  $("mMail").href = mailto(d.name);
+  $("mCopy").textContent = "Copy domain";
+  $("modal").classList.add("open");
+  $("modal").setAttribute("aria-hidden","false");
+  $("close").focus();
+}
+function closeModal() {
+  $("modal").classList.remove("open");
+  $("modal").setAttribute("aria-hidden","true");
+}
+function setSpotlight() {
+  const candidates = domains.filter(d => d.name !== "Domainzax.com");
+  const d = candidates[spotIndex % candidates.length];
+  spotIndex++;
+  $("spotName").textContent = d.name;
+  $("spotStory").textContent = d.description;
+  $("spotTags").innerHTML = makeTags(d.tags);
+  $("spotOpen").onclick = () => showDomain(d);
+}
+filters.forEach(b => b.addEventListener("click", () => {
+  activeFilter = b.dataset.filter;
+  filters.forEach(x => x.classList.toggle("active", x === b));
+  render();
+}));
+sorts.forEach(b => b.addEventListener("click", () => {
+  sortMode = b.dataset.sort;
+  sorts.forEach(x => x.classList.toggle("active", x === b));
+  render();
+}));
+$("search").addEventListener("input", () => {
+  searchQuery = $("search").value.trim().toLowerCase();
+  render();
+});
+$("reset").addEventListener("click", () => {
+  $("search").value = "";
+  searchQuery = "";
+  activeFilter = "all";
+  sortMode = "featured";
+  filters.forEach(x => x.classList.toggle("active", x.dataset.filter === "all"));
+  sorts.forEach(x => x.classList.toggle("active", x.dataset.sort === "featured"));
+  render();
+});
+$("random").addEventListener("click", () => {
+  const arr = domains.filter(matches);
+  if (arr.length) showDomain(arr[Math.floor(Math.random()*arr.length)]);
+  else { $("search").value=""; searchQuery=""; activeFilter="all"; filters.forEach(x=>x.classList.toggle("active",x.dataset.filter==="all")); render(); showDomain(domains[Math.floor(Math.random()*domains.length)]); }
+});
+$("spotNext").addEventListener("click", setSpotlight);
+list.addEventListener("click", e => {
+  const button = e.target.closest("[data-open]");
+  if (button) showDomain(domains.find(d => d.name === button.dataset.open));
+});
+$("close").addEventListener("click", closeModal);
+$("modal").addEventListener("click", e => { if (e.target === $("modal")) closeModal(); });
+document.addEventListener("keydown", e => { if (e.key === "Escape") closeModal(); });
+$("mCopy").addEventListener("click", async () => {
+  if (!currentDomain) return;
+  try {
+    if (navigator.clipboard && navigator.clipboard.writeText) await navigator.clipboard.writeText(currentDomain.name);
+    else throw new Error("Clipboard unavailable");
+    $("mCopy").textContent = "Copied ✓";
+  } catch {
+    const temp = document.createElement("textarea");
+    temp.value = currentDomain.name;
+    temp.setAttribute("readonly","");
+    temp.style.position="fixed"; temp.style.opacity="0";
+    document.body.appendChild(temp); temp.select();
+    const copied = document.execCommand("copy");
+    temp.remove();
+    $("mCopy").textContent = copied ? "Copied ✓" : currentDomain.name;
+  }
+});
+$("total").textContent = domains.length;
+$("siCount").textContent = domains.filter(d => d.name.toLowerCase().endsWith(".si")).length;
+$("techCount").textContent = domains.filter(d => /robot|humanoid|physical|ai|cognit|comput|intelligence|agent|reason/i.test(d.name)).length;
+render();
+setSpotlight();
+window.addEventListener("scroll", () => {
+  document.querySelectorAll(".asset:not(.reveal)").forEach(el => {
+    if (el.getBoundingClientRect().top < window.innerHeight * .96) el.classList.add("reveal");
+  });
+}, {passive:true});
 </script>
 <script src="/assets/domainzax-motion.js" defer></script>\n</body>
 </html>
