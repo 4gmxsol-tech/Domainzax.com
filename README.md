@@ -25,3 +25,8 @@ Early-stage public laboratory. Expect experiments, prototypes, and evolving rese
 ## License
 
 Code and original research assets are intended to be released under permissive licenses where practical. Individual datasets may have their own terms.
+
+
+## Portfolio and inquiries
+
+The consolidated domain inventory is maintained in [portfolio.md](./portfolio.md). For all domain sales and acquisition inquiries, contact **Domainzax@gmail.com**.
