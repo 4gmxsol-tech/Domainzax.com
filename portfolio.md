@@ -8,6 +8,8 @@
 
 ## Portfolio inventory
 
+**Listed domains: 38** (after removing unowned entries and case-only duplicates).
+
 | Domain | Sector | Record |
 |---|---|---|
 | HumanoidBehavior.com | Robotics / Physical AI | Owner-provided; verify current status |
@@ -42,15 +44,12 @@
 | Real2Sim.si | Brandable / Other | Owner-provided; verify current status |
 | Skimo.si | Brandable / Other | Owner-provided; verify current status |
 | FLZ.si | Brandable / Other | Owner-provided; verify current status |
-| Cognitive.si | AI / Technology | Owner-provided; verify current status |
 | Domainzax.com | AI / Technology | Owner-provided; verify current status |
-| Domainzax.si | AI / Technology | Owner-provided; verify current status |
 | TheCognitive.si | AI / Technology | Owner-provided; verify current status |
 | Quantificate.com | Brandable / Other | Owner-provided; verify current status |
 | ReasonFlow.xyz | AI / Technology | Owner-provided; verify current status |
 | KnightNova.com | Brandable / Other | Owner-provided; verify current status |
 | brenoai.com | AI / Technology | Owner-provided; verify current status |
-| ModelRail.si | AI / Technology | Owner-provided; verify current status |
 | thespark.si | Brandable / Other | Owner-provided; verify current status |
 | thecortex.si | Brandable / Other | Owner-provided; verify current status |
 
